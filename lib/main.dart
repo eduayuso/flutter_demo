@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return MaterialApp(
-      title: 'Dieta Manager',
+      title: 'Flutter REST Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
