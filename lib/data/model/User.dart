@@ -1,4 +1,7 @@
-class User {
+import 'package:flutter_rest_demo/data/model/IResource.dart';
+import 'dart:convert';
+
+class User implements IResource {
 
   int id;
   String email;
@@ -9,12 +12,24 @@ class User {
 
   User({this.id, this.email, this.firstName, this.lastName});
 
-  factory User.fromJson(Map<String, dynamic> json) {
+  factory User.init() {
     return User(
-      id: json['id'],
-      email: json['email'],
-      firstName: json['firstName'],
-      lastName: json['lastName'],
+      id: 0,
+      email: "",
+      firstName: "",
+      lastName: "",
+    );
+  }
+
+  factory User.fromJson(String stringJson) {
+
+    Map<String, dynamic> jsonObj = json.decode(stringJson);
+
+    return User(
+      id: jsonObj['id'],
+      email: jsonObj['email'],
+      firstName: jsonObj['firstName'],
+      lastName: jsonObj['lastName'],
     );
   }
 }
