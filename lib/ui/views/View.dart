@@ -23,8 +23,8 @@ class ViewState<T extends ViewModel> extends State<View<T>> {
 
   @override
   void initState() {
-    if (widget.onModelReady != null) {
-      widget.onModelReady(model);
+    if (this.widget.onModelReady != null) {
+      this.widget.onModelReady(model);
     }
     super.initState();
   }
@@ -33,7 +33,7 @@ class ViewState<T extends ViewModel> extends State<View<T>> {
   Widget build(BuildContext context) {
 
     return ChangeNotifierProvider<T>(
-        create: (context) => model,
-        child: Consumer<T>(builder: widget.builder));
+        create: (context) => this.model,
+        child: Consumer<T>(builder: this.widget.builder));
   }
 }

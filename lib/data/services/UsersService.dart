@@ -8,10 +8,12 @@ import 'DataService.dart';
 class UsersService extends DataService<UsersRepository> {
 
   StreamController<User> loggedUser;
+  StreamController<List<User>> users;
 
   UsersService() {
     this.repository = UsersRepository();
     this.loggedUser = StreamController<User>();
+    this.users = StreamController<List<User>>();
   }
 
   Future<bool> login(String email, String password) async {

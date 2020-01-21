@@ -4,6 +4,9 @@ import 'package:flutter_rest_demo/data/model/IResource.dart';
 import 'package:flutter_rest_demo/config/constants.dart' as Constants;
 import 'package:http/http.dart' as http;
 
+/*
+ * This class represents a RESTful API resource.
+ */
 abstract class ApiRepository<T extends IResource> {
 
   String getApiResourceTag();
