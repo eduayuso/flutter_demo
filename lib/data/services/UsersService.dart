@@ -1,4 +1,4 @@
-import 'package:flutter_rest_demo/data/model/Auth.dart';
+import 'package:flutter_rest_demo/data/model/Account.dart';
 import 'package:flutter_rest_demo/data/model/User.dart';
 import 'package:flutter_rest_demo/data/services/repository/UsersRepository.dart';
 import 'dart:async';
@@ -16,20 +16,14 @@ class UsersService extends DataService<UsersRepository> {
     this.users = StreamController<List<User>>();
   }
 
-  Future<bool> login(String email, String password) async {
+  Future<User> login(String email, String password) async {
 
-    Auth auth = await this.repository.login(email, password);
+    Account account = await this.repository.login(email, password);
+    if (account == null) return null;
 
-    // TODO: decode auth.token and get user/account id
-
-    User user = await this.repository.fetch(2);
-
-    if (user != null) {
-      this.loggedUser.add(user);
-      return true;
-
-    } else {
-      return false;
-    }
+    int userId = account.user;
+    User user = await this.repository.fetch(userId); // fetch user with id == account.user
+    this.loggedUser.add(user);
+    return user;
   }
 }

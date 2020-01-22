@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rest_demo/config/constants.dart';
+import 'package:flutter_rest_demo/data/model/User.dart';
 import 'package:flutter_rest_demo/ui/models/LoginModel.dart';
 import 'package:flutter_rest_demo/ui/widgets/CustomTextField.dart';
 import 'package:flutter_rest_demo/config/styles.dart' as Styles;
@@ -58,9 +59,13 @@ class LoginForm extends StatelessWidget {
               hint: "password",
               icon: Icons.lock
             ),
-            model.status == ViewStatus.Busy
-            ? CircularProgressIndicator()
-            : LoginButton(context),
+            Padding(
+              padding: EdgeInsets.only(top:40.0),
+              child:
+                model.status == ViewStatus.Busy
+                  ? CircularProgressIndicator()
+                  : LoginButton(context),
+            ),
           ],
         ),
       );
@@ -69,31 +74,34 @@ class LoginForm extends StatelessWidget {
   Widget LoginButton(BuildContext context) {
 
     return
-      Padding(
-        padding: EdgeInsets.only(top:40.0),
-        child: RaisedButton(
-          color: Colors.white,
-          child: Text(
-            'Logiasaxxxxaadfn',
-            style: TextStyle(color: Colors.black),
-          ),
-          onPressed: () async {
-            String username = this.emailController.text;
-            String password = this.passwordController.text;
-            loginAction(context, username, password);
-          }
+      RaisedButton(
+        color: Colors.white,
+        child: Text(
+          'Login',
+          style: TextStyle(color: Colors.black),
         ),
+        onPressed: () async {
+          String username = this.emailController.text;
+          String password = this.passwordController.text;
+          loginAction(context, username, password);
+        }
       );
   }
 
   void loginAction(BuildContext context, String username, String password) async {
 
-    final snackBar = SnackBar(content: Text('User $username, Pass $password'));
-    Scaffold.of(context).showSnackBar(snackBar);
-    /*
-    bool loginSuccess = await model.login(_controller.text, _controller.text);
-    if(loginSuccess){
-      Navigator.pushNamed(context, '/');
-    }*/
+    /*final snackBar = SnackBar(content: Text('User $username, Pass $password'));
+    Scaffold.of(context).showSnackBar(snackBar);*/
+
+    User loggedUser = await model.login(username ,password);
+    if (loggedUser != null) {
+      //Navigator.pushNamed(context, '/');
+      var userName = loggedUser.firstName;
+      final snackBar = SnackBar(content: Text('Logged! $userName'));
+      Scaffold.of(context).showSnackBar(snackBar);
+    } else {
+      final snackBar = SnackBar(content: const Text('Noooo!'));
+      Scaffold.of(context).showSnackBar(snackBar);
+    }
   }
 }

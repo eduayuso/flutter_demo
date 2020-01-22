@@ -1,4 +1,5 @@
 import 'package:flutter_rest_demo/config/constants.dart';
+import 'package:flutter_rest_demo/data/model/User.dart';
 import 'package:flutter_rest_demo/data/services/UsersService.dart';
 
 import '../../main.dart';
@@ -10,11 +11,13 @@ class LoginModel extends ViewModel {
 
   String errorMessage;
 
-  Future<bool> login(String email, String password) async {
+  Future<User> login(String email, String password) async {
 
     this.setStatus(ViewStatus.Busy);
-    bool success = await this.usersService.login(email, password);
+    email = "eve.holt@reqres.in";
+    password = "cityslicka";
+    User user = await this.usersService.login(email, password);
     this.setStatus(ViewStatus.Idle);
-    return success;
+    return user;
   }
 }

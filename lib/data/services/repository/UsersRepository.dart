@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter_rest_demo/data/model/Account.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_rest_demo/data/model/Auth.dart';
 import 'package:flutter_rest_demo/data/model/User.dart';
 import 'package:flutter_rest_demo/config/constants.dart' as Constants;
 import 'dart:convert';
@@ -28,7 +28,7 @@ class UsersRepository extends ApiRepository<User>{
     return jsonResponse.map((job) => new User.fromJson(job)).toList();
   }
 
-  Future<Auth> login(String email, String password) async {
+  Future<Account> login(String email, String password) async {
 
     final String url = Constants.REST_API_ROOT + Constants.REST_API_LOGIN;
     final dynamic bodyRequest = {
@@ -38,7 +38,7 @@ class UsersRepository extends ApiRepository<User>{
     final response = await http.post(url, body: bodyRequest);
 
     if (response.statusCode == HttpStatus.ok) {
-      return Auth.fromJson(json.decode(response.body));
+      return Account.fromJson(response.body);
 
     } else {
       return null;

@@ -20,11 +20,12 @@ class User implements IResource {
   factory User.fromJson(String stringJson) {
 
     Map<String, dynamic> jsonObj = json.decode(stringJson);
+    var data = jsonObj["data"];
 
     return User(
-      id: jsonObj['id'],
-      firstName: jsonObj['firstName'],
-      lastName: jsonObj['lastName'],
+      id: data['id'],
+      firstName: data['first_name'],
+      lastName: data['last_name'],
     );
   }
 }
