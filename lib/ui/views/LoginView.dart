@@ -31,13 +31,23 @@ class LoginViewState extends State<LoginView> {
   }
 }
 
-class LoginForm extends StatelessWidget {
+class LoginForm extends StatefulWidget {
 
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
   final LoginModel model;
 
   LoginForm({this.model});
+
+  @override
+  LoginFormState createState() => LoginFormState(model:this.model);
+}
+
+class LoginFormState extends State<StatefulWidget> {
+
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  LoginModel model;
+
+  LoginFormState({this.model});
 
   @override
   Widget build(BuildContext context) {
@@ -52,39 +62,47 @@ class LoginForm extends StatelessWidget {
             CustomTextField(
               controller: this.emailController,
               hint: "email",
-              icon: Icons.mail
+              icon: Icons.mail,
+              errorText: "Enter a valid email",
+              validation: this.model.emailValidation,
             ),
             CustomTextField(
               controller: this.passwordController,
               hint: "password",
-              icon: Icons.lock
+              icon: Icons.lock,
+              errorText: "Enter a valid password (3 characters at least)",
+              validation: this.model.passwordValidation,
             ),
-            Padding(
-              padding: EdgeInsets.only(top:40.0),
-              child:
-                model.status == ViewStatus.Busy
-                  ? CircularProgressIndicator()
-                  : LoginButton(context),
-            ),
+            LoginButton(context, this.model.status)
           ],
         ),
       );
   }
 
-  Widget LoginButton(BuildContext context) {
+  Widget LoginButton(BuildContext context, ViewStatus status) {
 
     return
-      RaisedButton(
-        color: Colors.white,
-        child: Text(
-          'Login',
-          style: TextStyle(color: Colors.black),
-        ),
-        onPressed: () async {
-          String username = this.emailController.text;
-          String password = this.passwordController.text;
-          loginAction(context, username, password);
-        }
+      Container(
+        height:64,
+        width: MediaQuery.of(context).size.width,
+        margin: EdgeInsets.only(top:40.0),
+        child:
+          FlatButton(
+            shape: new RoundedRectangleBorder(
+              borderRadius: new BorderRadius.circular(30.0),
+            ),
+            color: Colors.lightGreen,
+            child:
+              status == ViewStatus.Busy
+              ? CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(Colors.white))
+              : Text('Login', style: TextStyle(color: Colors.white)),
+            onPressed: () async {
+              if (status == ViewStatus.Busy) return null;
+              String username = this.emailController.text;
+              String password = this.passwordController.text;
+              loginAction(context, username, password);
+            },
+          )
       );
   }
 
@@ -99,9 +117,11 @@ class LoginForm extends StatelessWidget {
       var userName = loggedUser.firstName;
       final snackBar = SnackBar(content: Text('Logged! $userName'));
       Scaffold.of(context).showSnackBar(snackBar);
-    } else {
+    } else if (this.model.emailValidation && this.model.passwordValidation) {
       final snackBar = SnackBar(content: const Text('Noooo!'));
       Scaffold.of(context).showSnackBar(snackBar);
     }
+    this.emailController.text = username;
+    this.passwordController.text = password;
   }
 }

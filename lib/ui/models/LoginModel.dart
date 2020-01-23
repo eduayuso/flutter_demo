@@ -10,9 +10,17 @@ class LoginModel extends ViewModel {
   final UsersService usersService = locator<UsersService>();
 
   String errorMessage;
+  bool emailValidation = true;
+  bool passwordValidation = true;
 
   Future<User> login(String email, String password) async {
 
+    this.emailValidation = email.isNotEmpty;
+    this.passwordValidation = password.isNotEmpty && password.length > 3;
+    if (!this.emailValidation || !this.passwordValidation) {
+      this.setStatus(ViewStatus.Idle);
+      return null;
+    }
     this.setStatus(ViewStatus.Busy);
     email = "eve.holt@reqres.in";
     password = "cityslicka";

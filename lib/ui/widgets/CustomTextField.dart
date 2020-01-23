@@ -6,8 +6,10 @@ class CustomTextField extends StatelessWidget {
   TextEditingController controller = TextEditingController();
   final String hint;
   final IconData icon;
+  final String errorText;
+  final bool validation;
 
-  CustomTextField({@required this.controller, this.hint, this.icon});
+  CustomTextField({@required this.controller, this.icon, this.hint, this.errorText, this.validation});
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +19,7 @@ class CustomTextField extends StatelessWidget {
         child: TextField(
           decoration: InputDecoration(
             hintText: this.hint,
+            errorText: this.validation ? null : this.errorText,
             enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(
                 color: Theme.of(context).accentColor, width: 1.0
