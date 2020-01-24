@@ -18,14 +18,17 @@ class UsersRepository extends ApiRepository<User>{
   @override
   User decodeJson(String stringJson) {
 
-    return User.fromJson(stringJson);
+    Map<String, dynamic> jsonObj = json.decode(stringJson);
+    var data = jsonObj["data"];
+    return User.fromJson(data);
   }
 
   @override
-  List<User> decodeJsonList(String stringJsonList) {
+  List<User> decodeJsonList(String stringJson) {
 
-    List jsonResponse = json.decode(stringJsonList);
-    return jsonResponse.map((job) => new User.fromJson(job)).toList();
+    Map<String, dynamic> jsonObj = json.decode(stringJson);
+    var stringJsonList = jsonObj["data"] as List<dynamic>;
+    return stringJsonList.map((job) => new User.fromJson(job)).toList();
   }
 
   Future<Account> login(String email, String password) async {

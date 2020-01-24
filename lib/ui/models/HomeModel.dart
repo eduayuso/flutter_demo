@@ -5,17 +5,16 @@ import 'package:flutter_rest_demo/data/services/UsersService.dart';
 import '../../main.dart';
 import 'ViewModel.dart';
 
-class LoginModel extends ViewModel {
+class HomeModel extends ViewModel {
 
   final UsersService usersService = locator<UsersService>();
+  List<User> users = List<User>();
 
-  Future<User> login(String email, String password) async {
+  Future<List<User>> fetchUsers() async {
 
     this.setStatus(ViewStatus.Busy);
-    email = "eve.holt@reqres.in";
-    password = "cityslicka";
-    User user = await this.usersService.login(email, password);
+    this.users = await this.usersService.fetchAll();
     this.setStatus(ViewStatus.Idle);
-    return user;
+    return users;
   }
 }

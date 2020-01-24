@@ -43,8 +43,8 @@ class LoginForm extends StatefulWidget {
 
 class LoginFormState extends State<LoginForm> {
 
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController emailController = TextEditingController(text:"aaaaa");
+  final TextEditingController passwordController = TextEditingController(text:"bbbbbbb");
   final formKey = GlobalKey<FormState>();
   LoginModel model;
 
@@ -128,5 +128,7 @@ class LoginFormState extends State<LoginForm> {
 
     final snackBar = SnackBar(content: Text('Logged! $userName'));
     Scaffold.of(context).showSnackBar(snackBar);
+
+    Navigator.pushNamed(context, Constants.PAGE_HOME);
   }
 }

@@ -26,4 +26,10 @@ class UsersService extends DataService<UsersRepository> {
     this.loggedUser.add(user);
     return user;
   }
+
+  Future<List<User>> fetchAll() async {
+
+    List<User> users = await this.repository.fetchAll();
+    return users;
+  }
 }
