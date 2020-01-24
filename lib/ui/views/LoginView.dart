@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rest_demo/config/constants.dart';
 import 'package:flutter_rest_demo/data/model/User.dart';
 import 'package:flutter_rest_demo/ui/models/LoginModel.dart';
-import 'package:flutter_rest_demo/ui/widgets/CustomTextField.dart';
+import 'package:flutter_rest_demo/ui/widgets/CustomTextFormField.dart';
 import 'package:flutter_rest_demo/config/styles.dart' as Styles;
 import 'package:flutter_rest_demo/config/constants.dart' as Constants;
 
@@ -41,10 +41,11 @@ class LoginForm extends StatefulWidget {
   LoginFormState createState() => LoginFormState(model:this.model);
 }
 
-class LoginFormState extends State<StatefulWidget> {
+class LoginFormState extends State<LoginForm> {
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
   LoginModel model;
 
   LoginFormState({this.model});
@@ -56,26 +57,34 @@ class LoginFormState extends State<StatefulWidget> {
       Padding(
         padding: EdgeInsets.all(40.0),
         child:
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            CustomTextField(
-              controller: this.emailController,
-              hint: "email",
-              icon: Icons.mail,
-              errorText: "Enter a valid email",
-              validation: this.model.emailValidation,
+          Form(
+            key: this.formKey,
+            child:
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  CustomTextFormField(
+                    controller: this.emailController,
+                    hint: "Enter your email",
+                    icon: Icons.mail,
+                    validator: (value) {
+                      if (value.isEmpty) return "Enter a valida email";
+                      return null;
+                    }
+                  ),
+                  CustomTextFormField(
+                    controller: this.passwordController,
+                    hint: "Enter your password",
+                    icon: Icons.lock,
+                    validator: (value) {
+                      if (value.length < 6) return "Enter a valid password (6 characters at least)";
+                      return null;
+                    }
+                  ),
+                  LoginButton(context, this.model.status)
+                ],
             ),
-            CustomTextField(
-              controller: this.passwordController,
-              hint: "password",
-              icon: Icons.lock,
-              errorText: "Enter a valid password (3 characters at least)",
-              validation: this.model.passwordValidation,
-            ),
-            LoginButton(context, this.model.status)
-          ],
-        ),
+          ),
       );
   }
 
@@ -98,30 +107,26 @@ class LoginFormState extends State<StatefulWidget> {
               : Text('Login', style: TextStyle(color: Colors.white)),
             onPressed: () async {
               if (status == ViewStatus.Busy) return null;
-              String username = this.emailController.text;
-              String password = this.passwordController.text;
-              loginAction(context, username, password);
+              loginAction(context);
             },
           )
       );
   }
 
-  void loginAction(BuildContext context, String username, String password) async {
+  void loginAction(BuildContext context) async {
 
-    /*final snackBar = SnackBar(content: Text('User $username, Pass $password'));
-    Scaffold.of(context).showSnackBar(snackBar);*/
+    if (!this.formKey.currentState.validate()) return;
 
-    User loggedUser = await model.login(username ,password);
-    if (loggedUser != null) {
-      //Navigator.pushNamed(context, '/');
-      var userName = loggedUser.firstName;
-      final snackBar = SnackBar(content: Text('Logged! $userName'));
-      Scaffold.of(context).showSnackBar(snackBar);
-    } else if (this.model.emailValidation && this.model.passwordValidation) {
-      final snackBar = SnackBar(content: const Text('Noooo!'));
-      Scaffold.of(context).showSnackBar(snackBar);
-    }
-    this.emailController.text = username;
-    this.passwordController.text = password;
+    String username = this.emailController.text;
+    String password = this.passwordController.text;
+
+    User loggedUser = await model.login(username, password);
+
+    String userName = "";
+    if (loggedUser != null) userName = loggedUser.firstName;
+    else userName = "Nooooo!";
+
+    final snackBar = SnackBar(content: Text('Logged! $userName'));
+    Scaffold.of(context).showSnackBar(snackBar);
   }
 }
