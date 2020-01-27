@@ -7,7 +7,7 @@ import 'package:flutter_rest_demo/ui/widgets/CustomTextFormField.dart';
 import 'package:flutter_rest_demo/config/styles.dart' as Styles;
 import 'package:flutter_rest_demo/config/constants.dart' as Constants;
 
-import 'View.dart';
+import '../View.dart';
 
 class LoginView extends StatefulWidget {
 

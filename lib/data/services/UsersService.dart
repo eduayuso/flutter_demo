@@ -32,4 +32,10 @@ class UsersService extends DataService<UsersRepository> {
     List<User> users = await this.repository.fetchAll();
     return users;
   }
+
+  Future<User> fetch(int id) async {
+
+    User user = await this.repository.fetch(id);
+    return user;
+  }
 }

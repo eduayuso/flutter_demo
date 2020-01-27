@@ -22,9 +22,9 @@ const String ROLE_CLIENT        = "CLIENT";
 /*
  * Pages constants
  */
-const String PAGE_LOGIN         = "login";
-const String PAGE_HOME          = "home";
-const String PAGE_USER_PROFILE  = "userProfile";
+const String PAGE_LOGIN    = "login";
+const String PAGE_HOME     = "home";
+const String PAGE_PROFILE  = "profile";
 
 /*
  * Views properties
